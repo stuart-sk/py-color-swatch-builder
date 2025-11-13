@@ -1,11 +1,17 @@
+if __name__ == "__main__":
+    import sys
+    sys.path.insert(1, sys.path[0].split("src")[0])
+
 import logging
 from pynput import keyboard, mouse
 from PIL import Image, ImageGrab, ImageDraw, ImageFont
+from collections.abc import Callable
 
-class ColorPicker: 
+from src.Types import SwatchColor
 
-    def __init__(self, pick_rgb, on_esc):
-        self.pick_rgb = pick_rgb
+class SwatchMaker: 
+
+    def __init__(self, on_esc: Callable[[list],None]):
         self.on_esc = on_esc
         self.color_list = []
         with keyboard.Listener(on_release = self.onRel) as klstnr:
@@ -13,6 +19,9 @@ class ColorPicker:
                 self.mlstnr = mlstnr
                 klstnr.join()
                 mlstnr.join()
+
+    def pick_rgb(self, rgb):
+        self.color_list.append(SwatchColor(rgb))
 
     def getHex(self, rgb):
         return '%02X%02X%02X'%rgb
@@ -35,7 +44,7 @@ class ColorPicker:
         logger = logging.Logger('catch_all')
         if key == keyboard.Key.esc:
             try:
-                self.on_esc()
+                self.on_esc(self.color_list)
             except Exception as e:
                 logger.error(e, exc_info=True)
 
@@ -45,4 +54,6 @@ class ColorPicker:
                 return False
 
 if __name__ == "__main__":
-    color_picker = ColorPicker(lambda e: print(e), lambda: print("ESCAPE"))
+    swatch_maker = SwatchMaker(lambda e: (print(x) for x in e))
+
+    # color_picker = ColorPicker(lambda e: print(e), lambda: print("ESCAPE"))
