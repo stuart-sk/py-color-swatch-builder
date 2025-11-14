@@ -3,11 +3,15 @@ if __name__ == "__main__":
     sys.path.insert(1, "E:/Code/py-color-swatch-builder")
 
 from colorsys import rgb_to_hsv, hsv_to_rgb
+from PIL import ImageColor
 
 class SwatchColor:
     def __init__(self, rgb):
-        self.rgb = rgb 
-        self.hsv = rgb_to_hsv(*rgb)
+        if isinstance(rgb, tuple):
+            self.rgb = rgb
+        else:
+            self.rgb = ImageColor.getrgb(rgb)
+        self.hsv = rgb_to_hsv(*self.rgb)
         self.hue = int(self.hsv[0]*360)
         self.hue_rgb = tuple(int(x) for x in hsv_to_rgb(self.hsv[0], 1, 256))
         self.saturation = int(self.hsv[1]*100)
