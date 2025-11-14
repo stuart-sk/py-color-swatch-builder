@@ -6,7 +6,7 @@ from colorsys import rgb_to_hsv, hsv_to_rgb
 from PIL import ImageColor
 
 class SwatchColor:
-    def __init__(self, rgb):
+    def __init__(self, rgb :tuple|str = "black"):
         if isinstance(rgb, tuple):
             self.rgb = rgb
         else:
