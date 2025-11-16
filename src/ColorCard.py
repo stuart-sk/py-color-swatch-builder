@@ -1,11 +1,11 @@
 from dataclasses import dataclass
-from src.Types import SwatchColor
+from src.Rgb import Rgb
 from PIL import Image
 
 
 @dataclass
 class ColorCard:
-    color: SwatchColor
+    color: Rgb
     text: str
     height: int
     border: int

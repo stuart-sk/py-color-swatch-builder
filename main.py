@@ -2,7 +2,7 @@
 # from src.ColorWheel import *
 # from src.ColorWheelBox import *
 from src import ColorBox
-from src.Color import SwatchColor
+from src.Rgb import Rgb
 from src.Swatch import SwatchMaker
 from src.Utils import *
 import src.ColorWheel as ColorWheel
@@ -16,11 +16,11 @@ import time
 def main():
     time.sleep(.5)
     # print("Py Color Swatch Builder")
-    # color = SwatchColor((1,2,3))
+    # color = Rgb((1,2,3))
     # print(color)
     SwatchMaker(new_medium_swatch)
 
-def new_medium_swatch(color_list: list[SwatchColor]):
+def new_medium_swatch(color_list: list[Rgb]):
     font = ImageFont.truetype("SourceSans3-Black.ttf", 30)
 
     size = 700
@@ -114,7 +114,7 @@ def new_medium_swatch(color_list: list[SwatchColor]):
 
 
 
-def medium_swatch(color_list:list[SwatchColor]):
+def medium_swatch(color_list:list[Rgb]):
     size = 800
     page_size = (size + size//2, size)
     ring_size = 400

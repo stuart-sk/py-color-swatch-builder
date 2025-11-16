@@ -7,18 +7,18 @@ if __name__ == "__main__":
         wheel = ColorWheel(400,300,200,10 )
         dest = (40,20)
         wheel.paste_into(image, dest)
-        wheel.draw_bar(draw, SwatchColor("red"), dest)
-        wheel.draw_arrow(draw, SwatchColor("red"), dest)
-        wheel.draw_bar(draw, SwatchColor("oldlace"), dest)
-        wheel.draw_arrow(draw, SwatchColor("oldlace"), dest, from_hole=True, arrow_length=80)
+        wheel.draw_bar(draw, Rgb("red"), dest)
+        wheel.draw_arrow(draw, Rgb("red"), dest)
+        wheel.draw_bar(draw, Rgb("oldlace"), dest)
+        wheel.draw_arrow(draw, Rgb("oldlace"), dest, from_hole=True, arrow_length=80)
         image.show()
 
         # #colorwheel(100).show()
-        # small_rainbow_pi(400,100,SwatchColor((256,0,0))).show()
+        # small_rainbow_pi(400,100,Rgb((256,0,0))).show()
 
 
 from dataclasses import dataclass, field
-from src.Color import SwatchColor
+from src.Rgb import Rgb
 from PIL import Image, ImageDraw
 from colorsys import hsv_to_rgb
 from math import cos, sin, radians
@@ -31,7 +31,7 @@ class ColorWheel:
     inner_hole: int = field(default=0)
     line_width: int = field(default=0)
     use_sat_val: bool = field(default=False)
-    border_color: SwatchColor = field(default=SwatchColor("black"))
+    border_color: Rgb = field(default=Rgb("black"))
     coun:int =field(default=360)
 
     def __post_init__(self):
@@ -55,8 +55,8 @@ class ColorWheel:
                 draw.circle((self.mid_point, self.mid_point), self.inner_hole//2, fill=self.border_color.rgb)
             draw.circle((self.mid_point, self.mid_point), self.inner_hole//2 - self.line_width, fill=(0,0,0,0))
         image.alpha_composite(wheel_image, dest)
-    def draw_bar(self, draw: ImageDraw.ImageDraw, colors: SwatchColor, dest:tuple,  bar_width = 15, bar_fill = SwatchColor()):
-        colors = [colors] if isinstance(colors, SwatchColor) else colors
+    def draw_bar(self, draw: ImageDraw.ImageDraw, colors: Rgb, dest:tuple,  bar_width = 15, bar_fill = Rgb()):
+        colors = [colors] if isinstance(colors, Rgb) else colors
 
         for hue in reversed(colors):
             bar_length = (self.size-self.inner_hole)//2
@@ -69,8 +69,8 @@ class ColorWheel:
                 xm = dest[0] + self.mid_point+cos(radians(degree)) * (self.wheel_size//2)# +line_offset)
                 ym = dest[1] + self.mid_point+sin(radians(degree)) * (self.wheel_size//2)# +line_offset)
                 draw.line((x, y, xm, ym ), fill=line_colors[i], width=bar_width-line_offset)
-    def draw_arrow(self, draw: ImageDraw.ImageDraw, colors: SwatchColor, dest:tuple,  arrow_length = 30, arrow_degrees = 30, from_hole = False, bar_fill = SwatchColor()):
-        colors = [colors] if isinstance(colors, SwatchColor) else colors
+    def draw_arrow(self, draw: ImageDraw.ImageDraw, colors: Rgb, dest:tuple,  arrow_length = 30, arrow_degrees = 30, from_hole = False, bar_fill = Rgb()):
+        colors = [colors] if isinstance(colors, Rgb) else colors
         for hue in reversed(colors):
             bar_length = (self.size-self.inner_hole)//2
             degree = hue.hue -150
@@ -97,7 +97,7 @@ class ColorWheel:
                 bbox = (x -pi_radius, y -pi_radius, x + pi_radius, y + pi_radius)
                 draw.pieslice(bbox, arrow_dir - (arrow_degrees - 6*i)//2, arrow_dir + (arrow_degrees -6*i)//2, color)
 
-    def get_arrow_point(self, color:SwatchColor, dest: tuple = (0,0))->tuple:
+    def get_arrow_point(self, color:Rgb, dest: tuple = (0,0))->tuple:
         degree = color.hue -150
         arrow_dir = degree
         radius = self.inner_hole//2
@@ -110,7 +110,7 @@ class ColorWheel:
 
 
 
-def colorwheel(size, hue:SwatchColor|None = None, use_sat_val = False, count=360):
+def colorwheel(size, hue:Rgb|None = None, use_sat_val = False, count=360):
     image = Image.new("RGBA", (size,size), color=(0,0,0,0))
     draw = ImageDraw.Draw(image)
     seg_length = int(360/count)
@@ -133,7 +133,7 @@ def colorwheel(size, hue:SwatchColor|None = None, use_sat_val = False, count=360
     return image
 
 
-def small_rainbow_pi(size, hole, hues:SwatchColor = None, line_width = 20,count=360, use_sat_val = False)->Image.Image:
+def small_rainbow_pi(size, hole, hues:Rgb = None, line_width = 20,count=360, use_sat_val = False)->Image.Image:
     if not isinstance(hues, list):
         hues = [hues]
     

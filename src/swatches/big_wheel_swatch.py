@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
 
 from src.Swatch import SwatchMaker
-from src.Types import SwatchColor
+from src.Rgb import Rgb
 
 class BigWheelSwatch(SwatchMaker):
     def __init__(self):

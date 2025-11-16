@@ -2,12 +2,12 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(1, sys.path[0][:-4])
 
-from src.Types import SwatchColor
+from src.Rgb import Rgb
 from PIL import Image, ImageDraw, ImageFont
 from colorsys import hsv_to_rgb
 from math import cos, sin, radians
 
-def small_rainbow_pi(size, hole, hues:SwatchColor = None, count=360)->Image.Image:
+def small_rainbow_pi(size, hole, hues:Rgb = None, count=360)->Image.Image:
     if not isinstance(hues, list):
         hues = [hues]
     size_offset = 5 
@@ -49,7 +49,7 @@ def small_rainbow_pi(size, hole, hues:SwatchColor = None, count=360)->Image.Imag
     return img
 
 
-def rainbow_pi(size, count, hue:SwatchColor = None)->Image.Image:
+def rainbow_pi(size, count, hue:Rgb = None)->Image.Image:
     size_offset = 5 
     seg_length = int(360/count)
     # if 360 % seg_length != 0:

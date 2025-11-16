@@ -7,28 +7,29 @@ if __name__ == "__main__":
         draw=ImageDraw.Draw(img)
         dot=ColorDot()
         dot.draw(draw,(10,10))
-        dot.draw(draw,(50,30), SwatchColor("red"))
+        dot.draw(draw,(50,30), Rgb("red"))
         dot.radius=20
         dot.border_width = 10
-        dot.draw(draw,(50,30), SwatchColor("red"), SwatchColor("purple"))
-        dot.draw(draw,(130,30), SwatchColor("red"), SwatchColor("purple"), 80)
+        dot.draw(draw,(50,30), Rgb("red"), Rgb("purple"))
+        dot.draw(draw,(130,30), Rgb("red"), Rgb("purple"), 80)
         img.show()
 
 from dataclasses import dataclass, field
 from PIL import Image, ImageDraw
-from src.Color import SwatchColor
+# from src.Color import Rgb
+from src.Rgb import Rgb
 from colorsys import hsv_to_rgb
 import numpy as np
 
 @dataclass
 class ColorDot:
-    def __init__(self, radius: int = 10, fill: SwatchColor = SwatchColor("white"), border_color: SwatchColor = SwatchColor(), border_width: int = 2):
+    def __init__(self, radius: int = 10, fill: Rgb = Rgb("white"), border_color: Rgb = Rgb(), border_width: int = 2):
         self.radius=radius
         self.fill = fill
         self.border_color = border_color
         self.border_width = border_width
 
-    def draw(self, draw: ImageDraw.ImageDraw, xy: tuple[int,int], fill_override: SwatchColor = None, border_override: SwatchColor= None, radius_override: int = None ):
+    def draw(self, draw: ImageDraw.ImageDraw, xy: tuple[int,int], fill_override: Rgb = None, border_override: Rgb= None, radius_override: int = None ):
         radius = radius_override if radius_override else self.radius
         border_color = self.border_color if not border_override else border_override
         fill_color = self.fill if not fill_override else fill_override

@@ -1,16 +1,30 @@
 import collections.abc
 from colorsys import rgb_to_hsv, hsv_to_rgb
 from math import sqrt
+from PIL import ImageColor
+
+def main():
+    print(Rgb(0,0,0))
+    print(Rgb("white"))
+    print(Rgb())
+    print(Rgb((0,0,0)))
+
 
 class Rgb(collections.abc.Sequence):
     def __init__(self, *rgba: tuple):
-        if len(rgba) == 1:
 
-            self.rgb = tuple(rgba[0][:3])
-            self.hsv = rgb_to_hsv(*rgba[0][:3])
+        if len(rgba) == 0:
+            self.rgb = (0,0,0)
+        elif isinstance(rgba, str):
+            self.rgb = tuple(int(x) for x in ImageColor.getrgb(rgba))
+        elif len(rgba) == 1:
+            if isinstance(rgba[0], str):
+                self.rgb = tuple(int(x) for x in ImageColor.getrgb(rgba[0]))
+            else:
+                self.rgb = tuple(int(x) for x in rgba[0][:3])
         else:
-            self.rgb = tuple(rgba[:3])
-            self.hsv = rgb_to_hsv(*rgba[:3])
+            self.rgb = tuple(int(x) for x in rgba[:3])
+        self.hsv = rgb_to_hsv(self.rgb[0], self.rgb[1], self.rgb[2])
         self.hue = int(self.hsv[0]*360)
         self.hue_rgb = tuple(int(x) for x in hsv_to_rgb(self.hsv[0], 1, 256))
         self.saturation = int(self.hsv[1]*100)
@@ -37,7 +51,7 @@ class Rgb(collections.abc.Sequence):
     def hard_light(self, r):
         return Rgb(hard_light(self, r))
     def overlay(self, r):
-        return Rgb(overlay(self, r))
+        return Rgb(hard_light(self, r))
     def soft_light(self, r):
         return Rgb(soft_light(self, r))
     def inv_soft_light(self, r):
@@ -94,7 +108,6 @@ def soft_light(l,r):
     norml = tuple(x / 255 for x in l)
     normr = tuple(y / 255 for y in r)
 
-    # Photoshop version
     # soft_light_norm = tuple(
     #     # 2ab + a**2(1-2b)
     #     2 * x * y + x**2 * (1-2*y)
@@ -120,22 +133,4 @@ def inv_soft_light(l, r):
     return tuple( max(0, min(255,int(255 * x))) for x in inv_soft_light_norm)
 
 if __name__ == "__main__":
-    black = Rgb(0,0,0)
-    white = Rgb(255,255,255)
-    grey = Rgb(127,127,127)
-
-    red = Rgb(255,0,0)
-    green = Rgb((0,255,0))
-
-    print(green)
-    print(grey)
-    # print(green.hsv)
-    # print(green.rgb)
-    print(grey+green)
-    print(grey-green)
-    print(grey*green)
-    print(grey/green)
-    print(overlay(Rgb(206,182,116), Rgb(73,54,159)))
-    print(soft_light(Rgb(206,182,116), Rgb(73,54,159)))
-    print(Rgb(206,182,116))
-    print(inv_soft_light( Rgb(206,182,116), soft_light(Rgb(206,182,116), Rgb(73,54,159))))
+    main()

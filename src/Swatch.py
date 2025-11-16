@@ -7,7 +7,7 @@ from pynput import keyboard, mouse
 from PIL import Image, ImageGrab, ImageDraw, ImageFont
 from collections.abc import Callable
 
-from src.Types import SwatchColor
+from src.Rgb import Rgb
 
 class SwatchMaker: 
 
@@ -21,7 +21,7 @@ class SwatchMaker:
                 mlstnr.join()
 
     def pick_rgb(self, rgb):
-        self.color_list.append(SwatchColor(rgb))
+        self.color_list.append(Rgb(rgb))
 
     def getHex(self, rgb):
         return '%02X%02X%02X'%rgb

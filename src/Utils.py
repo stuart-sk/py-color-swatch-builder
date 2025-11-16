@@ -5,14 +5,14 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(1, sys.path[0][:-4])
 
-from src.Types import SwatchColor
+from src.Rgb import Rgb
 
-def get_color_rel_xy(color: SwatchColor, size: int):
+def get_color_rel_xy(color: Rgb, size: int):
     saturation = color.saturation * size // 100
     value = size - color.value * size//100
     return (saturation, value)
 
-def get_hue_rotation_xy(color: SwatchColor, radius: int):
+def get_hue_rotation_xy(color: Rgb, radius: int):
     # -150 to match CSP.
     degree = color.hue -150
     x = int(cos(radians(degree)) * radius)

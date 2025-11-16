@@ -8,10 +8,10 @@ from PIL import Image, ImageGrab, ImageDraw, ImageFont
 from colorsys import rgb_to_hsv, hsv_to_rgb
 from math import sin, cos, radians
 from src.Swatch import SwatchMaker
-from src.Types import SwatchColor
+from src.Rgb import Rgb
 from src.ColorBox import SatValBox
 from src.ColorWheel import small_rainbow_pi
-# from modules.swatch_classes import SwatchColor, SwatchWheel, rainbow_pi, small_rainbow_pi
+# from modules.swatch_classes import Rgb, SwatchWheel, rainbow_pi, small_rainbow_pi
 import numpy as np
 import math
 
@@ -19,13 +19,13 @@ def main():
     print("Hello from py-color-swatch-builder!")
     #large = LargeSwatches()
     small = SmallSwatches()
-    #rainbow_pi(200,360, SwatchColor((67, 196, 193))).show()
+    #rainbow_pi(200,360, Rgb((67, 196, 193))).show()
         # draw.line((mid_point, mid_point, mid_point+x, mid_point+y), fill="black")
 
 
 
 
-def SimpleSwatch(color_list:list[SwatchColor]):
+def SimpleSwatch(color_list:list[Rgb]):
     color_list
     unit = 280
     base = 200
@@ -100,7 +100,7 @@ def SimpleSwatch(color_list:list[SwatchColor]):
 
 class SmallSwatches:
     def __init__(self):
-        self.color_list:list[SwatchColor] = []
+        self.color_list:list[Rgb] = []
         #ColorPicker(self.add_color, self.make_swatch_v3)
         SwatchMaker(lambda e: SimpleSwatch(e))
     
@@ -108,9 +108,9 @@ class SmallSwatches:
     #     SimpleSwatch(self.color_list)
 
     def add_color(self, rgb):
-        self.color_list.append(SwatchColor(rgb))
-        # print(SwatchColor(rgb).hsv)
-        # self.make_color_cube(200, SwatchColor(rgb)).show()
+        self.color_list.append(Rgb(rgb))
+        # print(Rgb(rgb).hsv)
+        # self.make_color_cube(200, Rgb(rgb)).show()
 
     # use a vertical setup. Move Colors to far left and right.
     def make_swatch_v3(self):
@@ -213,11 +213,11 @@ class SmallSwatches:
 
 class LargeSwatches:
     def __init__(self):
-        self.color_list:list[SwatchColor] = []
+        self.color_list:list[Rgb] = []
         SwatchMaker(self.add_color, self.make_swatch)
     
     def add_color(self, rgb):
-        self.color_list.append(SwatchColor(rgb))
+        self.color_list.append(Rgb(rgb))
 
 
 
