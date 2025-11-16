@@ -6,16 +6,66 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(1, sys.path[0].split('src')[0])
     def main():
-        color = SwatchColor((255,0,0))
-        SatValBox(color).show()
-        SatValBox(color, fill_with_color=False).show()
+        image = Image.new("RGBA", (500,500))
+        draw = ImageDraw.Draw(image)
+        color = SwatchColor("orange")
+        color_box = ColorBox(300, color)
+        dest = (30,30)
+        color_box.paste_into(image, dest)
+        color_box.draw_dot(draw, dest, ["red", "lightpink", "moccasin", "brown"])
+        image.show()
 
 
+
+
+        # SatValBox(color).show()
+        # SatValBox(color, fill_with_color=False).show()
+
+
+from dataclasses import dataclass, field
+import operator
 from PIL import Image, ImageDraw
-from src.Types import SwatchColor
+from src.Color import SwatchColor
+from src.ColorDot import ColorDot
 from colorsys import hsv_to_rgb
+from src.Utils import get_color_rel_xy
 import numpy as np
 
+@dataclass
+class ColorBox:
+    size: int # Size of box excluding border
+    hue: SwatchColor
+    border: int = field(default=4)
+    border_fill: SwatchColor = field(default=SwatchColor())
+    dot: ColorDot = field(default_factory=lambda: ColorDot())
+
+    def __post_init__(self):
+        self.box_size = self.size - 2*self.border
+
+    def paste_into(self, image: Image.Image, dest: tuple):
+        box = Image.new("RGBA", (self.size, self.size), color=self.border_fill.rgb)
+        box.alpha_composite(SatValColor(self.box_size, self.hue), (self.border, self.border))
+        image.alpha_composite(box, dest)
+
+    def draw_dot(self, draw: ImageDraw.ImageDraw, dest: tuple, colors: list[SwatchColor], dot_size: int = None, use_hue = False, border_fill = None):
+        if not isinstance(colors, list):
+            colors = [colors]
+        for color in reversed(colors):
+            if not isinstance(color, SwatchColor):
+                color = SwatchColor(color)
+            rel_xy = get_color_rel_xy(color, self.box_size)
+
+            x = dest[0]  + self.border + rel_xy[0]
+            y = dest[1]  + self.border + rel_xy[1]
+            rgb = SwatchColor(color.hue_rgb) if use_hue else color
+
+            self.dot.draw(draw, (x,y), rgb, border_override= border_fill, radius_override=dot_size)
+
+    def get_dot_point(self, color:SwatchColor, dest: tuple=(0,0)):
+        rel_xy = get_color_rel_xy(color, self.box_size)
+        x = dest[0]  + self.border + rel_xy[0]
+        y = dest[1]  + self.border + rel_xy[1]
+        return (x,y)
 
 def SatValColor(size, swatch_color: SwatchColor) -> Image:
 

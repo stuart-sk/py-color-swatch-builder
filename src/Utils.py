@@ -7,12 +7,12 @@ if __name__ == "__main__":
 
 from src.Types import SwatchColor
 
-def get_color_rel_xy(color, size):
+def get_color_rel_xy(color: SwatchColor, size: int):
     saturation = color.saturation * size // 100
     value = size - color.value * size//100
     return (saturation, value)
 
-def get_hue_rotation_xy(color, radius):
+def get_hue_rotation_xy(color: SwatchColor, radius: int):
     # -150 to match CSP.
     degree = color.hue -150
     x = int(cos(radians(degree)) * radius)
