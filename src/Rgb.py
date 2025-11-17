@@ -127,6 +127,7 @@ def inv_soft_light(l, r):
     normr = tuple(y / 255 for y in r)
 
     inv_soft_light_norm = tuple(
+        1 if (-2 * a**2 + 2*a) == 0 else 
         (c - a**2) / (-2 * a**2 + 2*a)
         for a, c in zip(norml, normr)
     )

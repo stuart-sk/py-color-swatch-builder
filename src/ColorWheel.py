@@ -88,9 +88,9 @@ class ColorWheel:
 
                 offset_length = arrow_length - line_offset
 
-                print(f"drawing color {color}")
-                for t in ["i", "color", "line_offset", "radius", "x", "y", "offset_length"]:
-                    print(f"- {t}: {locals()[t]}")
+                # print(f"drawing color {color}")
+                # for t in ["i", "color", "line_offset", "radius", "x", "y", "offset_length"]:
+                #     print(f"- {t}: {locals()[t]}")
                 
                 pi_radius = arrow_length-1.5*line_offset
 

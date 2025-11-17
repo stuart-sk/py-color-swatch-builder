@@ -15,21 +15,18 @@ import time
 
 def main():
     time.sleep(.5)
-    # print("Py Color Swatch Builder")
-    # color = Rgb((1,2,3))
-    # print(color)
     SwatchMaker(new_medium_swatch)
 
 def new_medium_swatch(color_list: list[Rgb]):
     font = ImageFont.truetype("SourceSans3-Black.ttf", 30)
 
-    size = 700
-    width = 1200
-    height = 700
+    size = 800
+    width = 1300
+    height = 800
     page_size = (width, height)
     ring_size = 600
-    hole_size = 500
-    border = 50
+    hole_size = 550
+    border = 100
     midpoint = size//2
 
     image = Image.new("RGBA", page_size, "white")
@@ -40,19 +37,23 @@ def new_medium_swatch(color_list: list[Rgb]):
         color=color_list[i]
         y_start = segy*(i+(0 if i == 0 else 1))
         y_end = segy*(i+2)
-        text_y = y_start + segy//2
+        text_y = y_start + segy//2 if i != 0 else y_start + segy
         text_x = int(ring_size +1.5*border)
-        draw.rectangle((0, y_start, 1200, y_end),color.rgb)
+        draw.rectangle((0, y_start, width, y_end),color.rgb)
         draw.text((text_x, text_y), str(color), "black", font, "lm")
         if i != 0:
+            div_x = width - (width - ring_size - border) //2 
             div = color / color_list[0]
-            draw.rectangle((900, y_start+10, width-10, y_end-10),div.rgb)
-            draw.text((950, text_y), str(div), "black", font, "lm")
+            draw.rectangle((div_x, y_start+10, width-10, y_end-10),div.rgb)
+            draw.text((div_x+10, text_y), str(div), "black", font, "lm")
     
     div = []
     for i in range(len(color_list)):
         if i != 0:
-            div.append(color_list[i]/color_list[0])
+            if color_list[i].value > color_list[0].value:
+                div.append(color_list[0].inv_soft_light(color_list[i]))
+            else:
+                div.append(color_list[i]/color_list[0])
         
     div_border = 5
     div_size = min(segy * 2 - 2 * div_border, height//3)
@@ -60,14 +61,11 @@ def new_medium_swatch(color_list: list[Rgb]):
     div_box = ColorBox.ColorBox(div_size, div[0])
     div_box.paste_into(image, div_offset)
     for d in reversed(div):
-        div_box.draw_dot(draw, div_offset, d, 5)
-    
+        print(d)
+        fill_color = Rgb("white") if d.value < 50 else Rgb("black")
+        div_box.draw_dot(draw, div_offset, [d], 5, border_fill= fill_color)
 
-
-
-    
-
-    
+        
     wheel = ColorWheel.ColorWheel(ring_size + border * 2, ring_size, hole_size,10 )
     dest = (0,0)
     wheel.paste_into(image, dest)
@@ -93,25 +91,8 @@ def new_medium_swatch(color_list: list[Rgb]):
     for i in reversed(range(len(color_list))):
         color=color_list[i]
         square.draw_dot(draw, square_dest, color, 5)
-        # if i != 0:
-        #     square.draw_dot(draw, square_dest, color/color_list[0], 3)
-        # wheel.draw_arrow(draw, color, dest, from_hole=True, arrow_length=80 + length_offset)
-        # draw.rectangle((800, segy*(i), 1200, segy*(i+1)),color.rgb)
-    
-
-
-        
-    
-    
-        
-
-
 
     image.show()
-
-
-    image.show()
-
 
 
 def medium_swatch(color_list:list[Rgb]):
